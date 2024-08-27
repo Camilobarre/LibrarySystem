@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using LibrarySystem.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Controllers;
 [Route("[controller]")]
@@ -24,7 +25,16 @@ public class DocumentTypesController : Controller
         _logger.LogError("Llego al controlador");
         _logger.LogCritical("Llego al controlador");
 
-        var acaVaAQuedarTodosLosTiposDeDocumentos = _context.DocumentTypes.ToList();
-        return View(acaVaAQuedarTodosLosTiposDeDocumentos);
+
+        // Metodo index de forma sincrona
+        var AllDocumentTypes = _context.DocumentTypes.ToList();
+        return View(AllDocumentTypes);
+    }
+
+    // Metodo index de forma asincrona
+    public async Task<IActionResult> IndexAsync()
+    {
+        var AllDocumentTypes = await _context.DocumentTypes.ToListAsync();
+        return View(AllDocumentTypes);
     }
 }
